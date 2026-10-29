@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>전기작업계획서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  color-scheme: light;
+  --paper:#ffffff;
+  --sky:#2E9FDB;
+  --sky-deep:#1A7DB3;
+  --sky-soft:#EAF6FD;
+  --sky-line:#BFE1F4;
+  --ink:#1A2A36;
+  --muted:#667A89;
+  --danger:#D9534F;
+  --font:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:3px solid var(--sky);padding:14px 18px 12px}
+header.top .row{max-width:720px;margin:0 auto;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+header.top h1{margin:0;font-size:1.35rem;font-weight:700;letter-spacing:-.01em}
+header.top .sub{font-size:.8rem;color:var(--muted)}
+.saved{font-size:.78rem;color:var(--sky-deep);white-space:nowrap}
+
+main{max-width:720px;margin:0 auto;padding:8px 18px 140px}
+
+section.block{margin-top:26px}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--sky);color:#fff;font-weight:700;display:grid;place-items:center;font-size:.95rem}
+.sec-head h2{margin:0;font-size:1.08rem;font-weight:700}
+.panel{border:1px solid var(--sky-line);border-radius:14px;padding:14px;background:var(--paper)}
+.panel + .panel{margin-top:12px}
+.panel-title{font-weight:600;font-size:.92rem;color:var(--sky-deep);margin:0 0 10px}
+
+.field{display:block;margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field > span{display:block;font-size:.84rem;color:var(--muted);margin-bottom:4px;font-weight:500}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2 .field{margin-bottom:0}
+@media (max-width:420px){.grid2.stack{grid-template-columns:1fr}}
+
+input[type=text],input[type=tel],input[type=date],input[type=number],textarea{
+  width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--paper);
+  border:1px solid #D5E3EC;border-radius:10px;padding:10px 12px;outline:none;transition:border-color .15s, box-shadow .15s;
+  -webkit-appearance:none;appearance:none;min-height:44px}
+textarea{resize:vertical;min-height:84px;line-height:1.5}
+input:focus,textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-soft)}
+input::placeholder,textarea::placeholder{color:#A9B7C2}
+
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.chk{position:relative}
+.chk input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chk label{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #D5E3EC;border-radius:999px;font-size:.9rem;cursor:pointer;user-select:none;min-height:40px}
+.chk label::before{content:"";width:16px;height:16px;border:1.5px solid #9DB3C2;border-radius:4px;flex:none;background:#fff}
+.chk input:checked + label{border-color:var(--sky);background:var(--sky-soft);color:var(--sky-deep);font-weight:600}
+.chk input:checked + label::before{background:var(--sky) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat;border-color:var(--sky)}
+.chk input:focus-visible + label{outline:2px solid var(--sky);outline-offset:2px}
+
+.item{border:1px solid #DDEAF2;border-radius:12px;padding:12px;margin-bottom:10px;background:#FBFDFF}
+.item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.item-head b{font-size:.88rem;color:var(--sky-deep)}
+.btn{font:inherit;border:none;border-radius:10px;cursor:pointer;min-height:44px;padding:0 16px;font-weight:600}
+.btn:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.btn-ghost{background:var(--sky-soft);color:var(--sky-deep)}
+.btn-line{background:#fff;color:var(--sky-deep);border:1px dashed var(--sky);width:100%}
+.btn-del{background:none;color:var(--muted);font-size:.84rem;min-height:32px;padding:0 6px;font-weight:500}
+.btn-primary{background:var(--sky);color:#fff}
+.btn-primary:active{background:var(--sky-deep)}
+
+.sign-box{display:flex;align-items:center;justify-content:center;height:72px;border:1px dashed #A9CDE3;border-radius:10px;background:#fff;cursor:pointer;color:var(--muted);font-size:.86rem;overflow:hidden;width:100%}
+.sign-box img{max-height:64px;max-width:100%}
+.sign-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-top:10px}
+.photo{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--sky-line)}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo button{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(26,42,54,.7);color:#fff;font-size:16px;line-height:1;cursor:pointer}
+.add-photo{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border:1px dashed var(--sky);border-radius:10px;color:var(--sky-deep);font-size:.82rem;cursor:pointer;text-align:center;padding:6px;position:relative}
+.add-photo input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+.note{font-size:.8rem;color:var(--muted);margin:8px 0 0}
+
+.actions{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--paper);border-top:1px solid var(--sky-line);padding:10px 18px calc(10px + env(safe-area-inset-bottom,0px))}
+.actions .row{max-width:720px;margin:0 auto;display:flex;gap:10px}
+.actions .btn-primary{flex:1;font-size:1.02rem}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:20;background:rgba(26,42,54,.45);display:none;align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.sheet{background:#fff;width:100%;max-width:720px;border-radius:18px 18px 0 0;padding:16px 18px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto}
+.sheet h3{margin:0 0 10px;font-size:1.02rem}
+#sigCanvas{width:100%;height:200px;border:1px solid var(--sky-line);border-radius:12px;touch-action:none;background:#fff;display:block}
+.sheet .row{display:flex;gap:10px;margin-top:12px}
+.sheet .row .btn{flex:1}
+#previewImg{width:100%;border:1px solid var(--sky-line);border-radius:8px;display:block}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:.88rem;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+/* paper render for image export */
+#paper{position:fixed;left:-10000px;top:0;width:900px;background:#fff;color:#111;font-family:var(--font);font-size:13px;line-height:1.45;padding:36px 34px 40px}
+#paper h1{text-align:center;font-size:26px;margin:0 0 18px;letter-spacing:.3em;font-weight:700}
+#paper table{width:100%;border-collapse:collapse;table-layout:fixed}
+#paper td,#paper th{border:1px solid #6B8FA6;padding:6px 8px;vertical-align:middle;word-break:keep-all;overflow-wrap:anywhere}
+#paper th{background:#EAF6FD;font-weight:600;color:#0F4C70}
+#paper .sec td{background:#2E9FDB;color:#fff;font-weight:700;font-size:14px}
+#paper .lbl{background:#F4FAFE;font-weight:600;color:#0F4C70}
+#paper .c{text-align:center}
+#paper .pre{white-space:pre-wrap}
+#paper .sig{height:46px}
+#paper .sig img{max-height:42px;max-width:100%;display:block;margin:0 auto}
+#paper .small{font-size:11px;color:#556}
+#paper .ph{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+#paper .ph img{width:262px;height:196px;object-fit:cover;border:1px solid #BFE1F4}
+#paper .gap{height:10px;border:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="row">
+    <div><h1>전기작업계획서</h1><div class="sub">구성원 · BP사 대상 표준 양식</div></div>
+    <span class="saved" id="savedState" aria-live="polite"></span>
+  </div>
+</header>
+
+<main id="form">
+  <!-- 결재 -->
+  <section class="block">
+    <div class="panel">
+      <p class="panel-title">작성 정보</p>
+      <div class="grid2">
+        <label class="field"><span>작성일</span><input type="date" data-k="writeDate"></label>
+        <label class="field"><span>협의일</span><input type="date" data-k="meetDate"></label>
+      </div>
+    </div>
+    <div class="panel">
+      <p class="panel-title">도급인 결재</p>
+      <label class="field"><span>도급인</span><input type="text" data-k="contractor"></label>
+      <div class="grid2 stack">
+        <label class="field"><span>담당자 (작성자)</span><input type="text" data-k="apWriter" placeholder="이름"></label>
+        <label class="field"><span>검토 (관리감독자)</span><input type="text" data-k="apReview" placeholder="이름"></label>
+      </div>
+      <label class="field" style="margin-top:10px"><span>결재 (SKO 총괄책임자)</span><input type="text" data-k="apApprove" placeholder="이름"></label>
+    </div>
+    <div class="panel">
+      <p class="panel-title">수급인</p>
+      <label class="field"><span>수급인 (BP사)</span><input type="text" data-k="subcontractor" placeholder="000 BP사"></label>
+      <div class="grid2 stack">
+        <label class="field"><span>검토자 (수급인 사업주)</span><input type="text" data-k="subOwner" placeholder="이름"></label>
+        <label class="field"><span>작성자 (수급인 담당자)</span><input type="text" data-k="subManager" placeholder="이름"></label>
+      </div>
+      <div class="sign-row" style="margin-top:10px">
+        <div><span class="note" style="display:block;margin:0 0 4px">사업주 서명</span><button type="button" class="sign-box" data-sign="subOwnerSign">눌러서 서명</button></div>
+        <div><span class="note" style="display:block;margin:0 0 4px">담당자 서명</span><button type="button" class="sign-box" data-sign="subManagerSign">눌러서 서명</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">1</span><h2>작업(공사) 개요</h2></div>
+    <div class="panel">
+      <label class="field"><span>공사명</span><input type="text" data-k="projectName"></label>
+      <div class="grid2">
+        <label class="field"><span>공사기간 시작</span><input type="date" data-k="periodStart"></label>
+        <label class="field"><span>공사기간 종료</span><input type="date" data-k="periodEnd"></label>
+      </div>
+    </div>
+    <div class="panel">
+      <label class="field"><span>도급사</span><input type="text" data-k="ownerCo"></label>
+      <div class="grid2 stack">
+        <label class="field"><span>담당자</span><input type="text" data-k="ownerMgr"></label>
+        <label class="field"><span>연락처</span><input type="tel" data-k="ownerTel" inputmode="tel"></label>
+      </div>
+    </div>
+    <div class="panel">
+      <label class="field"><span>공사업체</span><input type="text" data-k="workCo"></label>
+      <div class="grid2 stack">
+        <label class="field"><span>작업책임자</span><input type="text" data-k="workLead"></label>
+        <label class="field"><span>연락처</span><input type="tel" data-k="workTel" inputmode="tel"></label>
+      </div>
+    </div>
+    <div class="panel">
+      <label class="field"><span>작업목적 및 내용</span><textarea data-k="purpose" rows="2"></textarea></label>
+      <label class="field"><span>공사범위</span><textarea data-k="scope" rows="3"></textarea></label>
+    </div>
+    <div class="panel">
+      <p class="panel-title" id="workerTitle">작업자 (0명)</p>
+      <div id="workers"></div>
+      <button type="button" class="btn btn-line" id="addWorker">+ 작업자 추가</button>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">2</span><h2>안전보건교육 및 보호구 지급 계획</h2></div>
+    <div class="panel">
+      <p class="panel-title">안전보건교육 계획</p>
+      <div class="grid2">
+        <label class="field"><span>교육일자</span><input type="date" data-k="eduDate"></label>
+        <label class="field"><span>교육장소</span><input type="text" data-k="eduPlace"></label>
+        <label class="field"><span>교육자</span><input type="text" data-k="educator"></label>
+        <label class="field"><span>인원</span><input type="number" inputmode="numeric" data-k="eduCount"></label>
+      </div>
+      <label class="field" style="margin-top:12px"><span>교육내용</span><textarea data-k="eduContent" rows="5"></textarea></label>
+    </div>
+    <div class="panel">
+      <p class="panel-title">지급 보호구</p>
+      <div class="checks" id="ppeChecks"></div>
+      <label class="field" style="margin-top:10px"><span>기타 보호구</span><input type="text" data-k="ppeEtc" placeholder="직접 입력"></label>
+      <p class="note">* 보호구 지급대장 관리 및 사용전 점검하여 이상시 교체</p>
+    </div>
+    <div class="panel">
+      <p class="panel-title">사용 장비</p>
+      <div class="grid2 stack">
+        <label class="field"><span>측정장비</span><input type="text" data-k="eqMeasure"></label>
+        <label class="field"><span>활선기구/장비</span><input type="text" data-k="eqLive"></label>
+        <label class="field"><span>방호구</span><input type="text" data-k="eqGuard"></label>
+        <label class="field"><span>기타</span><input type="text" data-k="eqEtc"></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">3</span><h2>작업순서 및 안전작업 방법</h2></div>
+    <div class="panel">
+      <label class="field"><span>작업명</span><input type="text" data-k="jobName" placeholder="예: 정류기 교체 작업"></label>
+      <div id="steps"></div>
+      <button type="button" class="btn btn-line" id="addStep">+ 작업순서 추가</button>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">4</span><h2>현장 통제 및 안전조치 계획</h2></div>
+    <div class="panel">
+      <label class="field"><span>한 줄에 한 항목씩 입력</span><textarea data-k="control" rows="5"></textarea></label>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">5</span><h2>첨부 자료</h2></div>
+    <div class="panel">
+      <p class="panel-title">설비</p>
+      <div class="checks" id="facChecks"></div>
+      <label class="field" style="margin-top:10px"><span>기타</span><input type="text" data-k="facEtc"></label>
+      <div class="photos" id="facPhotos"></div>
+      <p class="note">설비 체크사항에 대한 내역 서류를 사진으로 첨부하세요.</p>
+    </div>
+    <div class="panel">
+      <p class="panel-title">안전</p>
+      <div class="checks" id="safChecks"></div>
+      <label class="field" style="margin-top:10px"><span>기타</span><input type="text" data-k="safEtc"></label>
+      <div class="photos" id="safPhotos"></div>
+      <p class="note">위험성평가표 등 안전 체크사항 서류를 사진으로 첨부하세요.</p>
+    </div>
+    <p class="note" style="margin-top:14px;line-height:1.6">※ 작업의 목적 및 내용, 작업자의 자격 및 적정인원, 작업 범위와 작업책임자, 전기 위험 요인과 접근 한계거리, 전로차단 및 전원 재투입 절차, 보호구·방호구·활선작업용 기구의 준비와 사용, 일시 운전·작업 중단, 교대 근무 인계, 관계자 외 출입금지, 계획서 교육 방법과 평가·관리계획, 관련 도면과 기기 자료가 포함되어야 합니다.</p>
+    <button type="button" class="btn btn-ghost" id="resetBtn" style="margin-top:18px;width:100%">새 양식으로 초기화</button>
+  </section>
+</main>
+
+<div class="actions"><div class="row">
+  <button type="button" class="btn btn-ghost" id="previewBtn">미리보기</button>
+  <button type="button" class="btn btn-primary" id="saveImgBtn">사진으로 저장</button>
+</div></div>
+
+<div class="modal" id="sigModal" role="dialog" aria-modal="true" aria-labelledby="sigTitle">
+  <div class="sheet">
+    <h3 id="sigTitle">서명</h3>
+    <canvas id="sigCanvas"></canvas>
+    <div class="row">
+      <button type="button" class="btn btn-ghost" id="sigClear">지우기</button>
+      <button type="button" class="btn btn-ghost" id="sigCancel">취소</button>
+      <button type="button" class="btn btn-primary" id="sigOk">서명 완료</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="prevModal" role="dialog" aria-modal="true" aria-labelledby="prevTitle">
+  <div class="sheet">
+    <h3 id="prevTitle">미리보기</h3>
+    <p class="note" id="prevHint" style="margin:0 0 10px">이미지를 길게 눌러 사진첩에 저장할 수도 있습니다.</p>
+    <img id="previewImg" alt="작성된 전기작업계획서 이미지">
+    <div class="row">
+      <button type="button" class="btn btn-ghost" id="prevClose">닫기</button>
+      <button type="button" class="btn btn-primary" id="prevSave">사진으로 저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<div id="paper" aria-hidden="true"></div>
+
+<script>
+(function(){
+const STORE_KEY = "elec-workplan-v1";
+const PPE = ["절연안전모(ABE)","안전화/안전모","절연장화","안전대","보안경","절연장갑","방진마스크"];
+const FAC = ["전기단선도/결선도","기기 사양서","공사계획표(정전작업 계획 등)"];
+const SAF = ["위험성평가표","비상시 대응조직체계","작업계획서 평가 및 관리계획"];
+
+function defaults(){
+  return {
+    writeDate:"", meetDate:"",
+    contractor:"SKO 강남Access", apWriter:"", apReview:"", apApprove:"",
+    subcontractor:"", subOwner:"", subManager:"", subOwnerSign:"", subManagerSign:"",
+    projectName:"", periodStart:"", periodEnd:"",
+    ownerCo:"에스케이오앤에스", ownerMgr:"", ownerTel:"",
+    workCo:"에스케이오앤에스", workLead:"", workTel:"",
+    purpose:"정전관련 발전차 전기 입전, 정류기 불량관련 교체",
+    scope:"국소 주소지 일대\n기지국 분전함, 정류기부근 전원 케이블 탈부착",
+    workers:[{name:"",qual:"",tel:"",sign:""},{name:"",qual:"",tel:"",sign:""}],
+    eduDate:"", eduPlace:"안양스마트룸", educator:"관리감독자", eduCount:"21",
+    eduContent:"전압이 75v 이상인 정전 및 활선 작업 특별교육\nㅇ전기의 위험성 및 전격 방지에 관한 사항, 해당 설비의 보수 및 점검에 관한 사항\nㅇ정전 및 활선 작업시의 안전작업 방법 및 순서, 절연용 보호구 및 활선 작업용 기구 등의 사용에 관한 사항 등",
+    ppe:{}, ppeEtc:"",
+    eqMeasure:"테스터기", eqLive:"비접촉 검진기", eqGuard:"절연장갑", eqEtc:"",
+    jobName:"",
+    steps:[
+      {step:"전원차단",risk:"감전위험, 아크화상 위험",method:"- 작업전 작업자의 도면 숙지\n- 전원차단 후 시건장치, 위험 Tag 부착\n- 절연보호구 착용/활선기구 사용\n- 접근한계거리 유지 등",note:""},
+      {step:"활선여부 확인",risk:"감전위험, 아크화상 위험",method:"- 검전기로 방전 확인",note:""},
+      {step:"차단기 인출",risk:"중량물 낙하, 혼촉에의한 감전",method:"- 중량물 보조기구 사용, 검전 확인",note:""},
+      {step:"부품교체",risk:"",method:"- 오결선 확인",note:""},
+      {step:"통전",risk:"감전위험",method:"- 작업장소 출입금지 등 위험요인 재확인\n- 전원 재투입 절차 준수\n- 관련부서(전기팀 등) 협의",note:""}
+    ],
+    control:"전기 작업구간 로프 등으로 안전구역 설정, 작업구역외 작업자 출입 금지\n교대 근무 시 위험요인에 대한 인수인계 철저\n작업 전, 중, 후 정리정돈 실시",
+    fac:{}, facEtc:"", saf:{}, safEtc:"",
+    facPhotos:[], safPhotos:[]
+  };
+}
+
+let S = defaults();
+try{ const raw = localStorage.getItem(STORE_KEY); if(raw){ S = Object.assign(defaults(), JSON.parse(raw)); } }catch(e){}
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let saveTimer;
+function persist(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); $("#savedState").textContent="자동 저장됨"; }
+    catch(e){ $("#savedState").textContent="임시 저장 공간 부족"; }
+  },400);
+}
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2400); }
+
+/* simple fields */
+function bindFields(){
+  document.querySelectorAll("[data-k]").forEach(el=>{
+    const k = el.dataset.k;
+    el.value = S[k] || "";
+    el.oninput = ()=>{ S[k]=el.value; persist(); };
+  });
+}
+
+/* checkboxes */
+function renderChecks(id, list, key){
+  const wrap = document.getElementById(id); wrap.innerHTML="";
+  list.forEach((name,i)=>{
+    const d=document.createElement("div"); d.className="chk";
+    const iid=id+"_"+i;
+    d.innerHTML=`<input type="checkbox" id="${iid}"><label for="${iid}">${esc(name)}</label>`;
+    const cb=d.querySelector("input"); cb.checked=!!S[key][name];
+    cb.onchange=()=>{ S[key][name]=cb.checked; persist(); };
+    wrap.appendChild(d);
+  });
+}
+
+/* workers */
+function renderWorkers(){
+  const w=$("#workers"); w.innerHTML="";
+  S.workers.forEach((p,i)=>{
+    const d=document.createElement("div"); d.className="item";
+    d.innerHTML=`<div class="item-head"><b>작업자 ${i+1}</b><button type="button" class="btn btn-del">삭제</button></div>
+      <div class="grid2 stack">
+        <label class="field"><span>성명</span><input type="text" data-f="name"></label>
+        <label class="field"><span>비고(자격)</span><input type="text" data-f="qual"></label>
+      </div>
+      <label class="field" style="margin-top:10px"><span>전화번호</span><input type="tel" inputmode="tel" data-f="tel"></label>
+      <span class="note" style="display:block;margin:0 0 4px">서명</span>
+      <button type="button" class="sign-box">${p.sign?`<img src="${p.sign}" alt="서명">`:"눌러서 서명"}</button>`;
+    d.querySelectorAll("[data-f]").forEach(inp=>{ const f=inp.dataset.f; inp.value=p[f]||""; inp.oninput=()=>{p[f]=inp.value;persist();}; });
+    d.querySelector(".btn-del").onclick=()=>{ S.workers.splice(i,1); renderWorkers(); persist(); };
+    d.querySelector(".sign-box").onclick=()=>openSign("작업자 "+(i+1)+" 서명", url=>{ p.sign=url; renderWorkers(); persist(); });
+    w.appendChild(d);
+  });
+  $("#workerTitle").textContent=`작업자 (${S.workers.length}명)`;
+}
+$("#addWorker").onclick=()=>{ S.workers.push({name:"",qual:"",tel:"",sign:""}); renderWorkers(); persist(); };
+
+/* steps */
+function renderSteps(){
+  const w=$("#steps"); w.innerHTML="";
+  S.steps.forEach((s,i)=>{
+    const d=document.createElement("div"); d.className="item";
+    d.innerHTML=`<div class="item-head"><b>순서 ${i+1}</b><button type="button" class="btn btn-del">삭제</button></div>
+      <label class="field"><span>작업순서 및 작업내용</span><input type="text" data-f="step"></label>
+      <label class="field"><span>위험요소</span><input type="text" data-f="risk"></label>
+      <label class="field"><span>안전작업방법</span><textarea data-f="method" rows="3"></textarea></label>
+      <label class="field"><span>비고</span><input type="text" data-f="note"></label>`;
+    d.querySelectorAll("[data-f]").forEach(inp=>{ const f=inp.dataset.f; inp.value=s[f]||""; inp.oninput=()=>{s[f]=inp.value;persist();}; });
+    d.querySelector(".btn-del").onclick=()=>{ S.steps.splice(i,1); renderSteps(); persist(); };
+    w.appendChild(d);
+  });
+}
+$("#addStep").onclick=()=>{ S.steps.push({step:"",risk:"",method:"",note:""}); renderSteps(); persist(); };
+
+/* photos */
+function shrink(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>{ const img=new Image(); img.onload=()=>{
+      const m=1200, sc=Math.min(1,m/Math.max(img.width,img.height));
+      const c=document.createElement("canvas"); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height); res(c.toDataURL("image/jpeg",0.8)); };
+      img.onerror=rej; img.src=r.result; };
+    r.onerror=rej; r.readAsDataURL(file);
+  });
+}
+function renderPhotos(id,key){
+  const w=document.getElementById(id); w.innerHTML="";
+  S[key].forEach((src,i)=>{
+    const d=document.createElement("div"); d.className="photo";
+    d.innerHTML=`<img src="${src}" alt="첨부 사진 ${i+1}"><button type="button" aria-label="사진 삭제">×</button>`;
+    d.querySelector("button").onclick=()=>{ S[key].splice(i,1); renderPhotos(id,key); persist(); };
+    w.appendChild(d);
+  });
+  const add=document.createElement("label"); add.className="add-photo";
+  add.innerHTML=`+ 사진 첨부<input type="file" accept="image/*" multiple>`;
+  add.querySelector("input").onchange=async e=>{
+    for(const f of e.target.files){ try{ S[key].push(await shrink(f)); }catch(err){ toast("사진을 불러오지 못했습니다"); } }
+    renderPhotos(id,key); persist();
+  };
+  w.appendChild(add);
+}
+
+/* signature pad */
+let sigCb=null; const cv=$("#sigCanvas"); const ctx=cv.getContext("2d"); let drawing=false, dirty=false;
+function sizeCanvas(){ const r=cv.getBoundingClientRect(), dpr=window.devicePixelRatio||1; cv.width=r.width*dpr; cv.height=r.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.lineWidth=2.4; ctx.lineCap="round"; ctx.lineJoin="round"; ctx.strokeStyle="#111"; dirty=false; }
+function pos(e){ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+cv.addEventListener("pointerdown",e=>{ drawing=true; dirty=true; cv.setPointerCapture(e.pointerId); const p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
+cv.addEventListener("pointermove",e=>{ if(!drawing) return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+["pointerup","pointercancel"].forEach(t=>cv.addEventListener(t,()=>drawing=false));
+function openSign(title,cb){ $("#sigTitle").textContent=title; sigCb=cb; $("#sigModal").classList.add("open"); requestAnimationFrame(sizeCanvas); }
+$("#sigClear").onclick=sizeCanvas;
+$("#sigCancel").onclick=()=>$("#sigModal").classList.remove("open");
+$("#sigOk").onclick=()=>{ $("#sigModal").classList.remove("open"); if(sigCb) sigCb(dirty?cv.toDataURL("image/png"):""); };
+function bindSignBoxes(){
+  document.querySelectorAll("[data-sign]").forEach(b=>{
+    const k=b.dataset.sign;
+    b.innerHTML=S[k]?`<img src="${S[k]}" alt="서명">`:"눌러서 서명";
+    b.onclick=()=>openSign(b.previousElementSibling.textContent, url=>{ S[k]=url; bindSignBoxes(); persist(); });
+  });
+}
+
+/* reset */
+$("#resetBtn").onclick=()=>{
+  if(!confirm("입력한 내용을 모두 지우고 새 양식으로 시작할까요?")) return;
+  S=defaults(); try{localStorage.removeItem(STORE_KEY);}catch(e){} renderAll(); toast("새 양식으로 초기화했습니다");
+};
+
+/* paper rendering */
+function kDate(v){ if(!v) return "202&nbsp;&nbsp;&nbsp;년&nbsp;&nbsp;&nbsp;&nbsp;월&nbsp;&nbsp;&nbsp;&nbsp;일"; const [y,m,d]=v.split("-"); return `${y}년 ${+m}월 ${+d}일`; }
+function dDate(v){ if(!v) return ""; const [y,m,d]=v.split("-"); return `${y}. ${+m}. ${+d}.`; }
+function box(on){ return on?"☑":"□"; }
+function sigCell(u){ return u?`<img src="${u}" alt="">`:""; }
+
+function buildPaper(){
+  const W=S.workers, half=Math.ceil(Math.max(W.length,2)/2);
+  let wrows="";
+  for(let i=0;i<half;i++){
+    const a=W[i], b=W[i+half];
+    const cell=(p,n)=>p?`<td class="c">${n}</td><td class="c">${esc(p.name)}</td><td class="c">${esc(p.qual)}</td><td class="c">${esc(p.tel)}</td><td class="c sig">${sigCell(p.sign)}</td>`:`<td></td><td></td><td></td><td></td><td class="sig"></td>`;
+    wrows+=`<tr>${cell(a,i+1)}${cell(b,i+half+1)}</tr>`;
+  }
+  const ppe=PPE.map(n=>`${box(S.ppe[n])} ${esc(n)}`).join("&nbsp;&nbsp; ")+`&nbsp;&nbsp; ${box(!!S.ppeEtc)} 기타(${esc(S.ppeEtc)||"&nbsp;&nbsp;&nbsp;&nbsp;"})`;
+  const steps=S.steps.map((s,i)=>`<tr>${i===0?`<td class="c" rowspan="${S.steps.length}">${esc(S.jobName)}</td>`:""}<td class="c">${esc(s.step)}</td><td>${esc(s.risk)}</td><td class="pre">${esc(s.method)}</td><td>${esc(s.note)}</td></tr>`).join("");
+  const control=S.control.split("\n").filter(x=>x.trim()).map((x,i)=>`${i+1}. ${esc(x.trim())}`).join("<br>");
+  const fac=FAC.map(n=>`${box(S.fac[n])} ${esc(n)}`).join("&nbsp;&nbsp; ")+`<br>${box(!!S.facEtc)} 기타 (${esc(S.facEtc)||"&nbsp;&nbsp;&nbsp;&nbsp;"})`;
+  const saf=SAF.map(n=>`${box(S.saf[n])} ${esc(n)}`).join("&nbsp;&nbsp; ")+`<br>${box(!!S.safEtc)} 기타 (${esc(S.safEtc)||"&nbsp;&nbsp;&nbsp;&nbsp;"})`;
+  const photos=a=>a.length?`<div class="ph">${a.map(s=>`<img src="${s}" alt="">`).join("")}</div>`:"";
+  const period=(S.periodStart||S.periodEnd)?`${dDate(S.periodStart)} ~ ${dDate(S.periodEnd)}`:"202&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;~";
+
+  $("#paper").innerHTML=`
+  <h1>전기작업계획서</h1>
+  <table>
+    <colgroup><col style="width:12%"><col style="width:22%"><col style="width:20%"><col style="width:14%"><col style="width:16%"><col style="width:16%"></colgroup>
+    <tr><th>작성일</th><td class="c">${kDate(S.writeDate)}</td><td rowspan="2"><b>도급인:</b><br>${esc(S.contractor)}</td><th>담당자</th><th>검토</th><th>결재</th></tr>
+    <tr><th>협의일</th><td class="c">${kDate(S.meetDate)}</td><td class="c">${esc(S.apWriter)}<div class="small">작성자</div></td><td class="c">${esc(S.apReview)}<div class="small">관리감독자</div></td><td class="c">${esc(S.apApprove)}<div class="small">SKO 총괄책임자</div></td></tr>
+    <tr><td colspan="2" rowspan="2" style="border-left:none;border-bottom:none"></td><td rowspan="2"><b>수급인:</b><br>${esc(S.subcontractor)}</td><th>검토자</th><td class="c">${esc(S.subOwner)}<div class="small">수급인 사업주</div></td><td class="c sig">${sigCell(S.subOwnerSign)||'<span class="small">(인)</span>'}</td></tr>
+    <tr><th>작성자</th><td class="c">${esc(S.subManager)}<div class="small">수급인 담당자</div></td><td class="c sig">${sigCell(S.subManagerSign)||'<span class="small">(인)</span>'}</td></tr>
+  </table>
+  <div class="gap"></div>
+  <table>
+    <colgroup><col style="width:6%"><col style="width:12%"><col style="width:10%"><col style="width:12%"><col style="width:10%"><col style="width:6%"><col style="width:12%"><col style="width:10%"><col style="width:12%"><col style="width:10%"></colgroup>
+    <tr class="sec"><td colspan="10">1. 작업(공사) 개요</td></tr>
+    <tr><td colspan="2" class="lbl">■ 공 사 명</td><td colspan="8">${esc(S.projectName)}</td></tr>
+    <tr><td colspan="2" class="lbl">■ 공사기간</td><td colspan="8">${period}</td></tr>
+    <tr><td colspan="2" class="lbl">■ 도 급 사</td><td colspan="3">${esc(S.ownerCo)}</td><td colspan="5">○ 담당자 : ${esc(S.ownerMgr)} (연락처 ${esc(S.ownerTel)})</td></tr>
+    <tr><td colspan="2" class="lbl">■ 공사업체</td><td colspan="3">${esc(S.workCo)}</td><td colspan="5">○ 작업책임자 : ${esc(S.workLead)} (연락처 ${esc(S.workTel)})</td></tr>
+    <tr><td colspan="2" class="lbl">■ 작업목적 및 내용</td><td colspan="8" class="pre">${esc(S.purpose)}</td></tr>
+    <tr><td colspan="2" class="lbl">■ 공사범위</td><td colspan="8" class="pre">${esc(S.scope)}</td></tr>
+    <tr><td colspan="2" class="lbl">■ 작 업 자</td><td colspan="8">( ${W.length} 명)</td></tr>
+    <tr><th>연번</th><th>성 명</th><th>비고(자격)</th><th>전화번호</th><th>싸인</th><th>연번</th><th>성 명</th><th>비고(자격)</th><th>전화번호</th><th>싸인</th></tr>
+    ${wrows}
+    <tr class="sec"><td colspan="10">2. 안전보건교육 및 보호구 지급 계획 등</td></tr>
+    <tr><td colspan="10" class="lbl">■ 안전보건교육 계획</td></tr>
+    <tr><th colspan="2">교육일자</th><td colspan="3" class="c">${dDate(S.eduDate)||"202&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;."}</td><th colspan="2">교육장소</th><td colspan="3" class="c">${esc(S.eduPlace)}</td></tr>
+    <tr><th colspan="2">교 육 자</th><td colspan="3" class="c">${esc(S.educator)}</td><th colspan="2">인원</th><td colspan="3" class="c">${esc(S.eduCount)}</td></tr>
+    <tr><th colspan="2">교육내용</th><td colspan="8" class="pre">${esc(S.eduContent)}</td></tr>
+    <tr><td colspan="10" class="lbl">■ 보호구 지급 및 사용 장비</td></tr>
+    <tr><th colspan="2" rowspan="2">지급<br>보호구</th><td colspan="8">${ppe}</td></tr>
+    <tr><td colspan="8" class="small">* 보호구 지급대장 관리 및 사용전 점검하여 이상시 교체</td></tr>
+    <tr><th colspan="2" rowspan="4">사용 장비</th><td colspan="3" class="c">측정장비</td><td colspan="5">${esc(S.eqMeasure)}</td></tr>
+    <tr><td colspan="3" class="c">활선기구/장비</td><td colspan="5">${esc(S.eqLive)}</td></tr>
+    <tr><td colspan="3" class="c">방호구</td><td colspan="5">${esc(S.eqGuard)}</td></tr>
+    <tr><td colspan="3" class="c">기타</td><td colspan="5">${esc(S.eqEtc)}</td></tr>
+  </table>
+  <div class="gap"></div>
+  <table>
+    <colgroup><col style="width:13%"><col style="width:16%"><col style="width:20%"><col style="width:39%"><col style="width:12%"></colgroup>
+    <tr class="sec"><td colspan="5">3. 작업순서 및 안전작업 방법</td></tr>
+    <tr><th>작업명</th><th>작업순서 및 작업내용</th><th>위험요소</th><th>안전작업방법</th><th>비고</th></tr>
+    ${steps||'<tr><td colspan="5">&nbsp;</td></tr>'}
+    <tr class="sec"><td colspan="5">4. 현장 통제 및 안전조치 계획</td></tr>
+    <tr><td colspan="5" style="padding:10px 12px">${control||"&nbsp;"}</td></tr>
+    <tr class="sec"><td colspan="5">5. 첨부 자료</td></tr>
+    <tr><th>설비</th><td colspan="4">${fac}${photos(S.facPhotos)}</td></tr>
+    <tr><th>안전</th><td colspan="4">${saf}${photos(S.safPhotos)}</td></tr>
+    <tr><td colspan="5" class="small" style="line-height:1.6"><b>※ 위 내용에는 다음 사항이 포함되어야 함</b><br>① 작업의 목적 및 내용, ② 작업자의 자격 및 적정인원, ③ 작업 범위, 작업책임자 임명, 전격ㆍ아크 섬광ㆍ아크 폭발 등 전기 위험 요인 파악, 접근 한계거리, 활선접근 경보장치 휴대 등 작업시작 전에 필요한 사항, ④ 전로차단에 관한 작업계획 및 전원(電源) 재투입 절차 등 작업 상황에 필요한 안전 작업 요령, ⑤ 절연용 보호구 및 방호구, 활선작업용 기구ㆍ장치 등의 준비ㆍ점검ㆍ착용ㆍ사용 등에 관한 사항, ⑥ 점검ㆍ시운전을 위한 일시 운전, 작업 중단 등에 관한 사항, ⑦ 교대 근무 시 근무 인계(引繼)에 관한 사항, ⑧ 전기작업 장소에 대한 관계 근로자가 아닌 사람의 출입금지에 관한 사항, ⑨ 전기안전작업계획서를 해당 근로자에게 교육할 수 있는 방법과 작성된 전기안전작업계획서의 평가ㆍ관리계획, ⑩ 전기 도면, 기기 세부 사항 등 작업과 관련되는 자료 등</td></tr>
+  </table>`;
+}
+
+let lastBlob=null, lastUrl=null;
+async function renderImage(){
+  if(typeof html2canvas!=="function"){ toast("이미지 변환 도구를 불러오지 못했습니다. 인터넷 연결을 확인하세요."); return null; }
+  buildPaper();
+  try{ if(document.fonts&&document.fonts.ready) await document.fonts.ready; }catch(e){}
+  const imgs=[...document.querySelectorAll("#paper img")];
+  await Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r;})));
+  const canvas=await html2canvas($("#paper"),{scale:2,backgroundColor:"#ffffff",useCORS:true,logging:false});
+  const blob=await new Promise(r=>canvas.toBlob(r,"image/png"));
+  lastBlob=blob; if(lastUrl) URL.revokeObjectURL(lastUrl); lastUrl=URL.createObjectURL(blob);
+  return blob;
+}
+function fileName(){
+  const d=S.writeDate||new Date().toISOString().slice(0,10);
+  const name=(S.projectName||"").replace(/[\\/:*?"<>|]/g,"").trim().slice(0,30);
+  return `전기작업계획서_${d}${name?"_"+name:""}.png`;
+}
+let dl=null;
+async function getDownloads(){
+  if(dl!==null) return dl;
+  try{ dl = window.claude && window.claude.use ? await window.claude.use("downloads") : false; }catch(e){ dl=false; }
+  return dl||false;
+}
+async function saveBlob(blob){
+  const d=await getDownloads();
+  if(d){
+    try{ await d.save({filename:fileName(),data:blob}); toast("사진을 저장했습니다"); }
+    catch(err){
+      if(err&&err.code==="declined") toast("저장을 취소했습니다");
+      else if(err&&err.code==="rate_limited") toast("잠시 후 다시 눌러 주세요");
+      else showPreview("이미지를 길게 눌러 사진첩에 저장하세요.");
+    }
+  } else {
+    try{
+      const a=document.createElement("a"); a.href=lastUrl; a.download=fileName();
+      document.body.appendChild(a); a.click(); a.remove();
+      toast("사진을 저장했습니다. 다운로드 폴더를 확인하세요");
+    }catch(e){ showPreview("이미지를 길게 눌러 사진첩에 저장하세요."); }
+  }
+}
+function showPreview(hint){
+  $("#previewImg").src=lastUrl; $("#prevHint").textContent=hint||"이미지를 길게 눌러 사진첩에 저장할 수도 있습니다.";
+  $("#prevModal").classList.add("open");
+}
+async function withBusy(btn,fn){ const t=btn.textContent; btn.disabled=true; btn.textContent="만드는 중…"; try{ await fn(); } catch(e){ toast("이미지를 만들지 못했습니다"); } finally{ btn.disabled=false; btn.textContent=t; } }
+$("#saveImgBtn").onclick=e=>withBusy(e.currentTarget,async()=>{ const b=await renderImage(); if(b) await saveBlob(b); });
+$("#previewBtn").onclick=e=>withBusy(e.currentTarget,async()=>{ const b=await renderImage(); if(b) showPreview(); });
+$("#prevSave").onclick=()=>{ if(lastBlob) saveBlob(lastBlob); };
+$("#prevClose").onclick=()=>$("#prevModal").classList.remove("open");
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{ if(e.target===m) m.classList.remove("open"); }));
+
+function renderAll(){
+  bindFields(); bindSignBoxes();
+  renderChecks("ppeChecks",PPE,"ppe"); renderChecks("facChecks",FAC,"fac"); renderChecks("safChecks",SAF,"saf");
+  renderWorkers(); renderSteps(); renderPhotos("facPhotos","facPhotos"); renderPhotos("safPhotos","safPhotos");
+}
+renderAll();
+getDownloads();
+})();
+</script>
+</body>
+</html>
